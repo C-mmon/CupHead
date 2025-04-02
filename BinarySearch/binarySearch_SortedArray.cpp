@@ -96,3 +96,4 @@ return nums[left]; //we can either return left or right
 
 
 //Find how many time arry has been rotated.
+//Simply find the index of the minimum element in the rotated sorted array.
