@@ -1,0 +1,58 @@
+//For this given question, sliding window will fails, because
+//1. When we have negative numbers in the array, the sum doesn't follow a monotonic pattern
+//2. With negative numbers, a larger window doesn't guarantee a larger sum
+//3. Example: In array [3,-1,2,4], if K=6:
+//   - Window [3,-1,2] sum=4
+//   - Window [3,-1] sum=2
+//   - Window [2,4] sum=6 (this is actually the answer)
+//   Traditional sliding window can't handle such cases where we need to "shrink" from the left
+//   while also potentially removing elements from the middle
+
+// A[i] is the prefix sum till index i
+// sum = a[r]-a[l-1]
+// that means to ensure the sum is atleast k
+// we need a[r]-a[l-1]>=k
+// a[l-1] <= a[r]-k
+// we need the smallest index l-1 such that this condition holds
+// if a[i] is already >=k, subarray [0,i] is a candidatiate
+// otherwise, we find the smallest prefix sum 
+// a[d.front()]
+// dequeue store indices in increase order of A[i value]
+
+#include <vector>
+#include <deque>
+#include <climits>
+
+using namespace std;
+
+class Solution {
+public:
+    int shortestSubarray(vector<int>& nums, int k) {
+        int N = nums.size(), res = N + 1;
+        deque<int> d;  // Stores indices of the prefix sum array
+
+        vector<long> prefix(N + 1, 0); // Prefix sum array
+
+        // Compute prefix sums
+        for (int i = 0; i < N; i++)
+            prefix[i + 1] = prefix[i] + nums[i];
+
+        // Process each prefix sum
+        for (int i = 0; i <= N; i++) {
+            // Ensure the sum of the shortest subarray is at least k
+            while (!d.empty() && prefix[i] - prefix[d.front()] >= k) {
+                res = min(res, i - d.front());
+                d.pop_front();
+            }
+
+            // Maintain increasing order of prefix sums
+            while (!d.empty() && prefix[i] <= prefix[d.back()])
+                d.pop_back();
+
+            // Add the current index to the deque
+            d.push_back(i);
+        }
+
+        return res <= N ? res : -1;
+    }
+};
