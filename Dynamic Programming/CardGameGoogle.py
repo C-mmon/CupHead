@@ -42,3 +42,36 @@ for i in range(n - 1, -1, -1):
         dp[i] = score_pick_one
         
 return dp[0]`
+
+Why we need an array of n+2, 
+Pick one card: score_pick_one = cards[i] - dp[i+1]
+Pick two cards: score_pick_two = cards[i] + cards[i+1] - dp[i+2]
+If you are at the last card (i.e., i == n-1), you will access:
+dp[i+1] = dp[n]
+If you are at the second-last card (i == n-2), you access:
+dp[i+2] = dp[n]
+#include <vector>
+#include <algorithm>
+
+int maxScoreDifferenceDP(const std::vector<int>& cards) {
+    int n = cards.size();
+    if (n == 0) return 0;
+
+    std::vector<int> dp(n + 2, 0);  // Initialize dp array with n + 2 elements set to 0
+
+    for (int i = n - 1; i >= 0; --i) {
+        // Option 1: Pick one card
+        int scorePickOne = cards[i] - dp[i + 1];
+
+        if (i + 1 < n) {
+            // Option 2: Pick two cards
+            int scorePickTwo = cards[i] + cards[i + 1] - dp[i + 2];
+            dp[i] = std::max(scorePickOne, scorePickTwo);
+        } else {
+            // Only one card can be picked
+            dp[i] = scorePickOne;
+        }
+    }
+
+    return dp[0];  // Max difference starting from index 0
+}
