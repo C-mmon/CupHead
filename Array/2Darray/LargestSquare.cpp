@@ -1,3 +1,17 @@
+At first glance, I thought it looked like a variant of largest rectangle in histogram.
+But then I realized there is a unique way to solve this.
+You could first simply start with binary search. we know the max size of the square can be in the range max value of that element and min value.
+But we can add another twist to it, while we are performing a binary search, we can then maintain a deque.
+For example, we can use a deque to track the min element encountered so far.
+
+Now, the question gets broken down, does there exist, a sub-array with length k, where all the element size is greater than k.
+
+The problem with sliding window is that, we can end up iterating O(n*k).
+This is where we try to optimize it, now note, when we are traversing, if we had used a deque, we would simply remove first out of bound index, and then remove the entry which are not less than k.
+
+Too maintain a monotonic increasing dequeue, what you need is, in case if you have found smaller element than the back element of the dequeu, you pop it.
+after that you can push the currrent element, now further, from the front, you need to remove out of bound indices.
+The reason you want to have dequeue because you want to access the min element of the window in O(1)
 #include <iostream>
 #include <vector>
 #include <deque>
