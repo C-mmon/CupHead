@@ -65,3 +65,24 @@ int main() {
     cout << solution(cityline) << endl; // Output: 4
     return 0;
 }
+// what is the reason for adding 0, now imagine that, if we pop a skyscrapper at index 0, the shortest one we have so far.
+// The stack is now empty and whhen we try stk.back(), it will crash, hence we add -1 to act as a floor.
+//we push 0 at the back, lets take an example, where the stack was entirely increasing and we encounter no, shorter skyscrapper.,
+// with 0, we will encounter the case, where it will start the calculation.
+
+int solve(vector<int>& heights) {
+    const int n = (int)heights.size();
+    heights.push_back(0);
+    vector stk {-1};
+    int mx = 0;
+    for (int i = 0; i <= n; i++) {
+        while (stk.size() > 1 && heights[stk.back()] >= heights[i]) {
+            const int h = heights[stk.back()];
+            stk.pop_back();
+            const int w = i - stk.back() - 1;
+            mx = max(mx, min(h, w));
+        }
+        stk.push_back(i);
+    }
+    return mx * mx;
+}
