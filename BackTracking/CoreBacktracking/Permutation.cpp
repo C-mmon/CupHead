@@ -2,6 +2,7 @@ class Solution {
 public:
     void recursion(vector<int> num, int i, int j, vector<vector<int> > &res) {
         if (i == j-1) {
+            //time complexity of pushing the vector
             res.push_back(num);
             return;
         }
