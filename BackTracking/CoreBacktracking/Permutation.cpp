@@ -1,26 +1,24 @@
 class Solution {
 public:
-    void recursion(vector<int> num, int i, int j, vector<vector<int> > &res) {
-        if (i == j-1) {
-            //time complexity of pushing the vector
-            res.push_back(num);
-            return;
-        }
-        for (int k = i; k < j; k++) {
-          //avoid duplicates
-            if (i != k && num[i] == num[k]) continue;
-            swap(num[i], num[k]);
-            //recursion(num, i, j, res) generates permutations by fixing one element at position i, then recursing to fix the rest.
-            recursion(num, i+1, j, res);
-            swap(num[i], num[k]);
-        }
+vector <vector <int>> st;
+void recursion(vector <int> & nums, int index)
+{
+    if(index == nums.size())
+    {
+        st.push_back(nums);
+        return;
     }
-    vector<vector<int> > permuteUnique(vector<int> &num) {
-        sort(num.begin(), num.end());
-        vector<vector<int> >res;
-        recursion(num, 0, num.size(), res);
-        return res;
+    for(int i=index;i < nums.size();i++)
+    {
+        swap(nums[index], nums[i]);
+        recursion(nums, index+1);
+        swap(nums[index], nums[i]);
+    }
+}
+    vector<vector<int>> permute(vector<int>& nums) {
+        //we need to use the swap logic 
+        //the logic must also use the backtracking '
+        recursion(nums, 0);
+        return st;
     }
 };
-
-//Time complexity
