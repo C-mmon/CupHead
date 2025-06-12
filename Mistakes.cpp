@@ -1,0 +1,8 @@
+//Creating dummy pointer
+ListNode x(0);
+//creatingref
+ListNode dummy(0);       // actual object
+ListNode* tail = &dummy; // pointer
+
+dummy.next = new ListNode(5);   // dot — actual object
+tail->next = new ListNode(6);   // arrow — pointer
