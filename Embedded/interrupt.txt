@@ -1,0 +1,29 @@
+
+-> Event occurs: Peripheral device signals an events that requires the processor attention.
+
+-> Interrupt Request - Peripheral assers an Interrupt Request line connected to a dedicated interrupt controller
+
+->  If the specific interrupt is enabled (not maksed) and its priority is higher than 
+the current execution priority,he processor will finish its currently executing instruction (it will not stop in the middle of one).
+
+->The processor automatically saves its current context so it can resume the interrupted code later.
+This involves pushing critical CPU registers, such as the Program Counter (PC) and the Status Register (SR), onto the system stack.
+Some architectures may also push several general-purpose registers.
+
+-> Find the Handler: The processor acknowledges the interrupt and queries the Interrupt Controller to identify the source. 
+/ The controller provides an "interrupt vector," which is essentially an index into a special data structure in memory called the Interrupt Vector Table. 
+/ This table contains the starting addresses of all the Interrupt Service Routines (ISRs).
+
+-> Jump to ISR: The processor loads the address of the correct ISR from the vector table into the Program Counter. 
+This causes the processor to jump to and begin executing the code within the interrupt handler.
+
+-> Service the Interrupt: The ISR code runs and performs the time-critical tasks required to handle the event. 
+//This typically involves reading/writing to the peripheral's registers to get data and, crucially, to clear the interrupt flag that triggered the event.
+
+//Context Restore & Return: Once the ISR is complete, it executes a special "return from interrupt" instruction (like RETI). 
+//This signals the processor to pop the previously saved context (PC, SR, etc.) from the stack back into the CPU registers.
+
+//Resume Main Code: The original state of the processor is now fully restored. It seamlessly resumes execution of the main program at the exact instruction 
+where it was interrupted, as if nothing ever happened.
+
+//The golden rule for isr, is do absolute minimum, get out
