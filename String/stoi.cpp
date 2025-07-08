@@ -1,28 +1,41 @@
 class Solution {
-    public:
-        int myAtoi(string s) {
-                    int i = 0, n = s.size();
-            while (i < n && s[i] == ' ') i++; // Ignore leading whitespace
-    
-            int sign = 1;
-            if (i < n && (s[i] == '-' || s[i] == '+')) {
-                sign = (s[i] == '-') ? -1 : 1;
-                i++;
-            }
-    
-            int result = 0;
-            while (i < n && isdigit(s[i])) {
-                int digit = s[i] - '0';
-    
-                // Check for overflow before multiplying
-                if (result > (INT_MAX - digit) / 10) {
-                    return sign == 1 ? INT_MAX : INT_MIN;
-                }
-    
-                result = result * 10 + digit;
-                i++;
-            }
-    
-            return result * sign;
+public:
+    int myAtoi(string s) {
+        if (s.size() == 0) {
+            return 0;
         }
-    };
+        int i = 0;
+        while (i < s.size() && s[i] == ' ') {
+            i++;
+        }
+        // skip the + sign as well
+        bool sign = false;
+        if (s[i] == '-') {
+            sign = true;
+            i++;
+        } else if (s[i] == '+') {
+            i++;
+        }
+        int sum = 0;
+        int num;
+        while (i < s.size() && isdigit(s[i])) {
+            int num = s[i] - '0';
+            if (sum > (INT_MAX - num) / 10)
+                {
+                    if (sign) {
+                        return INT_MIN;
+                    }
+                    return INT_MAX;
+                }
+            else {a
+                sum = sum * 10 + num;
+            }
+            i++;
+        }
+        if(sign)
+        {
+            return -sum;
+        }
+        return sum;
+    }
+};
