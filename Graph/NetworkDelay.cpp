@@ -1,60 +1,37 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-
-        // adjacency list banado mast, use classic pair method
-        vector<pair<int,int>> adj[n+1]; 
-        // <!-- min heap banadia ek jo min distance dega bar bar priority queue m  -->
-        priority_queue<pair<int,int> , vector<pair<int,int>> , greater <pair<int,int>>> pq;
-
-        // <!-- directed hai to ek sided list define kardi  -->
-
-        for( auto it : times){
-            adj[it[0]].push_back({it[1] , it[2]});
+        // Adjacency list (faster than map)
+        vector<vector<pair<int, int>>> graph(n + 1);
+        for (auto& edge : times) {
+            graph[edge[0]].emplace_back(edge[1], edge[2]);
         }
 
-        // <!-- sabki distance ko k node se initially infinite mark krdia -->
-        vector<int> dist(n+1, 1e9);
+        // Min-heap of {accumulatedTime, node}
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+        pq.emplace(0, k);
 
-        // <!-- node k ki node k se distance to 0 hi hogi  -->
-        dist[k] =0;
-        pq.push({0,k});
+        // Use a distance vector for both visited status & shortest time
+        vector<int> dist(n + 1, INT_MAX);
+        dist[k] = 0;
 
-        // <!-- iteration traversal BFS starts -->
+        while (!pq.empty()) {
+            auto [currTime, u] = pq.top(); pq.pop();
 
-        while(!pq.empty()){
-            auto it = pq.top();
-            pq.pop();
-            int dis = it.first;
-            int node = it.second;
+            // Skip if we already have a better time for this node
+            if (currTime > dist[u]) continue;
 
-            // <!-- ab har node ko pura check karna hai ek edge at a time -->
-
-            for( auto it : adj[node]){
-                int adjnode = it.first;
-                int wt = it.second;
-
-                // <!-- agar distance kam ayi kisi tarah to us node ki dist update kardo kam wali -->
-
-                if(dist[adjnode] > dis +wt){
-                    dist[adjnode] = wt+dis;
-                    pq.push({dis+wt, adjnode});
+            for (auto& [v, wt] : graph[u]) {
+                int newTime = currTime + wt;
+                if (newTime < dist[v]) {
+                    dist[v] = newTime;
+                    pq.emplace(newTime, v);
                 }
             }
         }
 
-        // <!-- max distance node k se is the weight taken to spread in whole graph -->
-        int ans = 0; 
-        for ( int i=1;i<dist.size(); i++){
-            ans = max(ans, dist[i]);
-        }
-
-        // <!-- agar visit hi nahi hua to -1 return karo  -->
-        
-        if( ans == 1e9) return -1;
-        return ans;
-
-
-        
+        // Get max time to reach any node
+        int ans = *max_element(dist.begin() + 1, dist.end());
+        return ans == INT_MAX ? -1 : ans;
     }
 };
