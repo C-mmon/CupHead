@@ -1,0 +1,44 @@
+enum class Color
+{
+  RED, 
+  BLUE,
+  YELLOW,
+}
+Color c=Color::RED;
+
+
+class MyClass {
+private:
+    int secret;
+
+public:
+    MyClass() : secret(42) {}
+    friend void revealSecret(const MyClass& obj);
+};
+
+
+//C++ have compiler generated construct
+// copy constructor
+// Default constructor
+// Move constructor //create a new object by stealing the resources of the existing constructor
+// Copy Assignment Operator: Assigns the value of one existing object to another.
+// Move Assignement Operator // assign the resource of an temporrary object to existing object
+
+//he Rule of Three: If a class defines any of a destructor, copy constructor, or copy assignment operator, it should probably define all three. This was the traditional rule before C++11 and is relevant when manual resource management (like raw pointers) is involved.
+
+//The Rule of Five: With the introduction of move semantics in C++11, the rule was extended. If you define any of the five special member functions
+//(destructor, copy constructor, copy assignment operator, move constructor, or move assignment operator), you should consider defining or deleting all five.
+//The Rule of Zero: The modern and preferred approach. Structure your classes so that they don't need to define any special member functions. 
+//This is achieved by using resource-managing classes like smart pointers (std::unique_ptr, std::shared_ptr) and containers (std::vector, std::string) that handle their own resources correctly.
+
+
+//Every expression in C++ has a value category, which determines how it can be used. The primary categories are:
+
+//lvalue (locator value): Represents an object that occupies an identifiable location in memory (e.g., a variable). You can take the address of an lvalue.
+
+//prvalue (pure rvalue): Represents a temporary value, often the result of an expression, that doesn't have an identifiable memory location 
+//(e.g., a literal like 42 or the return value of a function).
+
+//xvalue (expiring value): Represents an object near the end of its lifetime, whose resources can be "stolen" (e.g., the result of std::move).
+
+//glvalues (generalized lvalues) include lvalues and xvalues. rvalues include prvalues and xvalues
