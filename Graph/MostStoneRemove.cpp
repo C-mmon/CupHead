@@ -5,50 +5,41 @@ public:
             return hash<int>()(p.first) ^ (hash<int>()(p.second) << 1);
         }
     };
-    void dfs(pair<int, int> stone,
-             unordered_set<pair<int, int>, pair_hash>& visited,
-             unordered_map<int, vector<pair<int, int>>>& rows,
-             unordered_map<int, vector<pair<int, int>>>& cols) {
-
-        visited.insert(stone);
-
-        // Explore same row
-        for (auto& nei : rows[stone.first]) {
-            if (visited.find(nei) == visited.end()) {
-                dfs(nei, visited, rows, cols);
-            }
+    void dfs(unordered_map<int, vector<int>>& column,
+             unordered_map<int, vector<int>>& rows, int row, int col,
+             unordered_set<pair<int, int>, pair_hash>& visited) {
+        if (visited.count({row, col}))
+            return;
+        visited.insert({row, col});
+        for (auto nextRow : column[col]) {
+            dfs(column, rows, nextRow, col, visited);
         }
 
-        // Explore same column
-        for (auto& nei : cols[stone.second]) {
-            if (visited.find(nei) == visited.end()) {
-                dfs(nei, visited, rows, cols);
-            }
+        for (auto nextCol : rows[row]) {
+            dfs(column, rows, row, nextCol, visited);
         }
+
+        return;
     }
-
-
-
     int removeStones(vector<vector<int>>& stones) {
-        unordered_map<int, vector<pair<int, int>>> rows, cols;
+        unordered_map<int, vector<int>> column;
+        unordered_map<int, vector<int>> rows;
+
+        for (int i = 0; i < stones.size(); i++) {
+            column[stones[i][1]].push_back(stones[i][0]);
+            rows[stones[i][0]].push_back(stones[i][1]);
+        }
+
         unordered_set<pair<int, int>, pair_hash> visited;
-
-        // Build row and column maps
-        for (auto& stone : stones) {
-            pair<int, int> p = {stone[0], stone[1]};
-            rows[stone[0]].push_back(p);
-            cols[stone[1]].push_back(p);
-        }
-
-        int numComponents = 0;
-        for (auto& stone : stones) {
-            pair<int, int> p = {stone[0], stone[1]};
-            if (visited.find(p) == visited.end()) {
-                dfs(p, visited, rows, cols);
-                numComponents++;
+        int componentsize = 0;
+       for (const auto& s : stones) {
+            if (!visited.count({s[0], s[1]})) {
+                dfs(column, rows, s[0], s[1], visited);
+                ++componentsize;
             }
-        }
+       }
+           
 
-        return stones.size() - numComponents;
+        return stones.size() - componentsize;
     }
 };
