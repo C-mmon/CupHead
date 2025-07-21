@@ -1,0 +1,1 @@
+If we take a closer look at the pattern, we can find that the count of solutions is ((n+1) * (n+2)) / 2. The problem is equivalent to distributing n identical balls  in three boxes and the solution is n+2C2. In general, if there are m variables (or boxes) and n balls , the formula becomes n+m-1Cm-1. 
