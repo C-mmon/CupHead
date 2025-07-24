@@ -23,3 +23,30 @@ ex i/p
 10 2
 4 2
 8 0 o/p =3
+
+
+  You want to create a sequence {a[0] a[1], ... a[N-2], a[N-1]} whose length is N. The sequence must meet the following conditions:
+
+a[0] should always be 0.
+a[i], the ith number should always be 0 or a positive integer
+the absolute value of the difference between ith and i+1 th number should be equal to or smaller than 1. In other words, every i satisfies the condition:
+|a[i] - a[i+1]| <= 1.
+There can be a limited value in the sequence. A limited value is given as (x,y). x means the place of a number & y means the maximum of a number. Given (2,5), the max value of a[2] can be 5. There may be M limited values and the following requirement is added:
+Given a limited value of (x,y) the xth number cannot exceed y (a[x] <= y)
+GIven the length of a sequence N, and M limited values, you need to find the way that maximizes the largest value when creating a sequence satisfying the a forementioned conditions. Then you are required to print the max value. There maybe multiple sequences that have a max value.
+
+Example:
+N = 10, M = 2
+{(2,1) , (7,1)}
+Output: 3
+Explaination: The following sequence can be created using the given conditions
+{0, 1, 1, 2, 3, 3, 2, 1, 2, 3}. And the max value here is 3.
+
+N = 10, M = 5
+{(1,3) (2,9) (4, 6) (7, 4) (9, 5)}
+Output: 5
+
+N = 10, M = 1
+{(3, 1)}
+Output: 7
+Explaination: {0, 1, 1, 2, 3, 4, 5, 6, 7}
