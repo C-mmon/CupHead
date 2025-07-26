@@ -25,6 +25,51 @@ leftPrev->next = prev;        // Connect leftPrev to new head of reversed sublis
 
 return dummy.next;
 
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+//reverse logic is correct
+ListNode* reverse(ListNode* n, int count)
+{
+    ListNode* store = n, *curr=n, *prev= NULL, *temp;
+    while(count-- && curr != NULL)
+    {
+        temp = curr->next;
+        curr->next= prev;
+        prev= curr;
+        curr= temp;
+    }
+    n->next= curr;
+    return prev;
+}
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        //we dont need to reer
+        if (!head || left == right) return head;
+        ListNode* temp = head;
+        ListNode dummy(0);
+        dummy.next= head;
+
+        ListNode* prev = &dummy;
+        for(int i=1; i<left; i++)
+        {
+            prev=prev->next;
+        }
+        ListNode* start = prev->next;
+
+        prev->next = reverse(prev->next, right - left + 1);
+        return dummy.next;
+    }
+};
 /*
 Let's understand different scenarios:
 
