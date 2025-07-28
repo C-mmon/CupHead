@@ -1,30 +1,43 @@
 #include <iostream>
 
-class Logger
+using namespace std;
+
+class Singleton
 {
-public:
-	static Logger& inst()
+private:
+	//instance class is always created at the program startup
+	static Singleton instance;
+
+	//Private constructor
+	//We declare this constructor as private, because only the static reference
+	// can accesss this functionality of the class
+	Singleton()
 	{
-		static Logger lg;
-		return lg;
-	}
-	void inc() { ++value;}
 
-	int get() const{
-		return value;
 	}
 
-private: 
-	Logger() = default; //hide the ctor
-	~Logger() = default;
+	//we delete the copy constructor
+	Singleton(const Singleton&)=delete;
+	//We delete the equal to operator to prevent assignature operation
+	Singleton& operator = (const Singleton&) = delete;
+public:
+	static Singleton& getInstance()
+	{
+		static Singleton instance;
+		return instance;
+	}
 
-	Logger(const Logger&) = delete; //delete copy constructor
-	Logger& operator=(const Logger&) = delete; //copy assignment
-	int value =0;
+	void sayHello()
+	{
+		cout <<"Aniket is good"<<endl;
+	}
 };
+
 
 int main()
 {
-	Logger::inst().inc();
-	std::cout << "Logger Value "<<Logger::inst().get() <<std::endl;
+	//We use alias to ensure only one refere ce
+	Singleton& store = Singleton::getInstance();
+	store.sayHello();
+
 }
