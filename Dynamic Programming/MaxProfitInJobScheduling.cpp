@@ -1,51 +1,33 @@
 class Solution {
 public:
-    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
-               int n = startTime.size();
-        vector<tuple<int, int, int>> jobs;
-
-        for (int i = 0; i < n; ++i) {
-            jobs.emplace_back(startTime[i], endTime[i], profit[i]);
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime,
+                      vector<int>& profit) {
+        int n = startTime.size();
+        vector<tuple<int, int, int>> store;
+        for (int i = 0; i < n; i++) {
+            store.push_back({endTime[i], startTime[i], profit[i]});
         }
+        sort(store.begin(), store.end()); 
+        vector<int> dp(n + 1, 0); 
+        for (int i = 1; i <=n; i++) {
+            int endDay = get<0>(store[i-1]);
+            int startDay = get<1>(store[i-1]);
+            int profit = get<2>(store[i-1]);
+            int left = 0, right= i-2,ans=-1;
 
-        // Step 1: Sort jobs by endTime
-        sort(jobs.begin(), jobs.end(), [](const auto& a, const auto& b) {
-            return get<1>(a) < get<1>(b); // end time ascending
-        });
-
-        // Step 2: Prepare dp and endTime list
-        vector<int> dp(n, 0);
-        vector<int> ends(n);
-        for (int i = 0; i < n; ++i) {
-            ends[i] = get<1>(jobs[i]);
-        }
-
-        // Step 3: Fill dp
-        for (int i = 0; i < n; ++i) {
-            int start = get<0>(jobs[i]);
-            int currProfit = get<2>(jobs[i]);
-
-            // Binary search for last non-conflicting job
-            int l = 0, r = i - 1;
-            int idx = -1;
-
-            while (l <= r) {
-                int m = l + (r - l) / 2;
-                if (ends[m] <= start) {
-                    idx = m;
-                    l = m + 1;
+            while (left <= right) {
+                int mid = left + (right-left) / 2;
+                int endCandidate = get<0>(store[mid]);
+                if (endCandidate <= startDay) {
+                    ans = mid;
+                    left = mid + 1;
                 } else {
-                    r = m - 1;
+                    right = mid - 1;
                 }
             }
-
-            if (idx != -1) {
-                currProfit += dp[idx];
-            }
-
-            dp[i] = max(i > 0 ? dp[i - 1] : 0, currProfit);
+            //if the answer is at index x, theen the ans+1 will be the dp index
+            dp[i] = max(dp[i-1], profit + ((ans>=0) ? dp[ans+1]:0));
         }
-
-        return dp[n - 1];
-    }
-};
+            return dp[n];
+        }
+    };
