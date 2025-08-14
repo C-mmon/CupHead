@@ -31,3 +31,39 @@ public:
             return dp[n];
         }
     };
+
+
+//Extending the variation, now let's assume that we can only select only K jobs
+A meeting can last multiple days (s[i] to e[i], inclusive).
+
+You can attend at most k meetings per day, even if they overlap in time.
+
+We are not finding the maximum total across the whole conference — instead, we want the maximum possible in a single day.
+    //At the end of the day, all the matter is which meeting is active on that given day,
+
+
+    Reasonig:
+For each day D in 1...d 
+    collect all meeting where s[i] <= d <=e[i]
+    sort them knowledge gain ascending
+    Take the top K value
+
+
+   int ans = 0;
+    for (int day = 1; day <= d; day++) {
+        vector<int> available;
+        for (int i = 0; i < n; i++) {
+            if (s[i] <= day && day <= e[i]) {
+                available.push_back(a[i]);
+            }
+        }
+        sort(available.begin(), available.end(), greater<int>());
+        int gain = 0;
+        for (int i = 0; i < min(k, (int)available.size()); i++) {
+            gain += available[i];
+        }
+        ans = max(ans, gain);
+    }
+    return ans;
+
+
