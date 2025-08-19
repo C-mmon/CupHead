@@ -1,24 +1,29 @@
 class Solution {
 public:
-vector <vector <int>> st;
-void recursion(vector <int> & nums, int index)
+
+void helper(vector <int>& nums, int index, vector<vector <int>>& store)
 {
-    if(index == nums.size())
+    if(index== nums.size())
     {
-        st.push_back(nums);
+        store.push_back(nums);
         return;
     }
-    for(int i=index;i < nums.size();i++)
+    
+    for(int i=index;i< nums.size(); i++)
     {
+
+            swap(nums[index], nums[i]);
+            helper(nums, index+1, store);
         swap(nums[index], nums[i]);
-        recursion(nums, index+1);
-        swap(nums[index], nums[i]);
+
+
     }
+    return ;
 }
     vector<vector<int>> permute(vector<int>& nums) {
-        //we need to use the swap logic 
-        //the logic must also use the backtracking '
-        recursion(nums, 0);
-        return st;
+        vector <vector <int>> store;
+        helper(nums, 0, store);
+        sort(store.begin(), store.end());
+        return store;
     }
 };
