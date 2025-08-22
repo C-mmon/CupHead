@@ -1,34 +1,43 @@
-class Vector{
-public:
-	double x, y;
-	
-	//these are arthematic operation
-	Vector operator+(Vector &rhs) const
-	{
-		return {x+rhs.x, y+rhs.y};
-	}
+class Vector 
+{
+    public:
+    double x,y;
 
-	//we want to return the reference of the vector itself, and nothing else
-	Vector& operator+=(const Vector &rhs)
-	{
-		x+=rhs.x;
-		y+=rhs.y;
-		return *this; //this gives the call back *this
-	}
+    Vector (double a, double b): x(a), y(b) {}
+    Vector operator+(Vector &rhs) const
+    {
+        //this is a ptr, so we must return this->x
+        return {this->x, this->y};
+    }
 
-	//comparison ==
-	bool operator==(const Vector& rhs) const
-	{
-		return x== rhs.x && y == rhs.y;
-	}
 
-	//same thing can be implemented for the > or <
+    //We are taking the original object and manipulating it over here
+
+    Vector& operator+=(const Vector &rhs)
+    {
+        x+=rhs.x;
+        y+=rhs.y;
+
+        return *this;
+    }
+
+    bool operator==(const Vector &rhs) const
+    {
+      //To use this, you must de-reference it
+      return this->x == rhs.x && this->y == rhs.y;
+    }
 };
 
 int main()
 {
-Vector v1{10, 10};
-Vector v2{10, 10};
+//this will not work, because these methods are not public
+    Vector v2 {10,20};
 
-v1 += v2; 
+    //We can also create an object using the parameterized way
+    // if that function call exist
+    Vector v3 {10, 10};
+
+    v2+=v2;
+    return 0;
 }
+
