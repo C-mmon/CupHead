@@ -1,5 +1,6 @@
 //C++ provides a default interface to perform a memberwise copy of all member variable, including pointers.
 #include <iostream>
+//Both object share the same underlying data
 using namespace std;
 
 class Shallow
