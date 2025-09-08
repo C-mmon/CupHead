@@ -1,3 +1,6 @@
+//We are not using atomic bool, because using the mutex we can gurranting
+
+
 class DiningPhilosophers {
 private:
     static constexpr int N = 5;
@@ -31,6 +34,10 @@ public:
             cv.wait(lk, [&]{ return token[i]; });
             // token remains true until we pass it after eating
         }
+
+        //Once, we come here, locks are automatically destroyed
+        //the above above are scoped lock, and ensure the destruction happens automatically
+        
 
         // Acquire forks (consistent ordering to avoid deadlock among token-holders)
         if (left < right) {
