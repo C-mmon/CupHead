@@ -55,3 +55,12 @@ unordered_set <int> visited;
         }
     }
 };
+
+//If multiple nodes are affected, then we need to push all the nodes and then perform a bfs, so 
+Put all infected nodes in the queue initially with time = 0.
+
+Maintain a visited set (or map) so you do not revisit nodes.
+
+Pop from queue, push unvisited neighbors with time + 1.
+
+Keep updating res = max(res, time).
