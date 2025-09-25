@@ -40,3 +40,10 @@ public:
         return results;
     }
 };
+
+//Each equation becomes two edge:
+// a -> b : with weight val
+// b -> a : with weight 1/val
+
+//Core thing handle the case of negative logic over here
+
